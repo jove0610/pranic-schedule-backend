@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('countries', CountryController::class);
 Route::apiResource('users', UserController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
