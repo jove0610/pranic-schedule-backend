@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CountryStoreRequest;
 use App\Http\Requests\CountryUpdateRequest;
 use App\Models\Country;
+use App\Models\State;
 
 class CountryController extends Controller
 {
@@ -45,6 +46,9 @@ class CountryController extends Controller
 
     public function destroy($id)
     {
+        if (State::first('country_id', $id)) {
+            return abort(400, 'Data is being used');
+        }
         $isDeleted = Country::destroy($id);
         return $isDeleted ? response()->noContent() : abort(404, 'Not Found');
     }
