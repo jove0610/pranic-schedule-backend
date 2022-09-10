@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StateStoreRequest;
 use App\Http\Requests\StateUpdateRequest;
+use App\Models\Office;
 use App\Models\State;
 
 class StateController extends Controller
@@ -45,6 +46,9 @@ class StateController extends Controller
 
     public function destroy(int $id)
     {
+        if (Office::first('state_id', $id)) {
+            return abort(400, 'Data is being used');
+        }
         $isDeleted = State::destroy($id);
         return $isDeleted ? response()->noContent() : abort(404, 'Not Found');
     }
