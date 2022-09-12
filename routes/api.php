@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('countries', CountryController::class);
+Route::apiResource('courses', CourseController::class);
 Route::apiResource('offices', OfficeController::class);
 Route::apiResource('states', StateController::class);
 Route::apiResource('users', UserController::class);
