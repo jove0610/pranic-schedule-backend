@@ -6,6 +6,7 @@ use App\Http\Requests\OfficeIndexRequest;
 use App\Http\Requests\OfficeStoreRequest;
 use App\Http\Requests\OfficeUpdateRequest;
 use App\Models\Office;
+use App\Models\Schedule;
 
 class OfficeController extends Controller
 {
@@ -60,6 +61,9 @@ class OfficeController extends Controller
 
     public function destroy(int $id)
     {
+        if (Schedule::first('course_id', $id)) {
+            return abort(400, 'Data is being used');
+        }
         $isDeleted = Office::destroy($id);
         return $isDeleted ? response()->noContent() : abort(404, 'Not Found');
     }

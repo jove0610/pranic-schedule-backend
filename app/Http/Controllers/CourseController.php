@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CourseStoreRequest;
 use App\Http\Requests\CourseUpdateRequest;
 use App\Models\Course;
+use App\Models\Schedule;
 
 class CourseController extends Controller
 {
@@ -45,6 +46,9 @@ class CourseController extends Controller
 
     public function destroy($id)
     {
+        if (Schedule::first('course_id', $id)) {
+            return abort(400, 'Data is being used');
+        }
         $isDeleted = Course::destroy($id);
         return $isDeleted ? response()->noContent() : abort(404, 'Not Found');
     }
