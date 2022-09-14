@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\OfficeController;
@@ -20,13 +21,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('countries', CountryController::class);
-Route::apiResource('courses', CourseController::class);
-Route::apiResource('offices', OfficeController::class);
-Route::apiResource('schedules', ScheduleController::class);
-Route::apiResource('states', StateController::class);
-Route::apiResource('users', UserController::class);
+Route::post('auth/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::apiResource('countries', CountryController::class)->only(['index', 'show']);
+Route::apiResource('courses', CourseController::class)->only(['index', 'show']);
+Route::apiResource('offices', OfficeController::class)->only(['index', 'show']);
+Route::apiResource('schedules', ScheduleController::class)->only(['index', 'show']);
+Route::apiResource('states', StateController::class)->only(['index', 'show']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('auth/logout', [AuthController::class, 'logout']);
+    Route::get('auth/user', [AuthController::class, 'user']);
+
+    Route::apiResource('countries', CountryController::class)->except(['index', 'show']);
+    Route::apiResource('courses', CourseController::class)->except(['index', 'show']);
+    Route::apiResource('offices', OfficeController::class)->except(['index', 'show']);
+    Route::apiResource('schedules', ScheduleController::class)->except(['index', 'show']);
+    Route::apiResource('states', StateController::class)->except(['index', 'show']);
+    Route::apiResource('users', UserController::class);
 });
