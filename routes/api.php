@@ -32,11 +32,13 @@ Route::apiResource('states', StateController::class)->only(['index', 'show']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('auth/logout', [AuthController::class, 'logout']);
     Route::get('auth/user', [AuthController::class, 'user']);
-
-    Route::apiResource('countries', CountryController::class)->except(['index', 'show']);
-    Route::apiResource('courses', CourseController::class)->except(['index', 'show']);
-    Route::apiResource('offices', OfficeController::class)->except(['index', 'show']);
     Route::apiResource('schedules', ScheduleController::class)->except(['index', 'show']);
-    Route::apiResource('states', StateController::class)->except(['index', 'show']);
-    Route::apiResource('users', UserController::class);
+
+    Route::group(['middleware' => 'is.admin'], function () {
+        Route::apiResource('countries', CountryController::class)->except(['index', 'show']);
+        Route::apiResource('courses', CourseController::class)->except(['index', 'show']);
+        Route::apiResource('offices', OfficeController::class)->except(['index', 'show']);
+        Route::apiResource('states', StateController::class)->except(['index', 'show']);
+        Route::apiResource('users', UserController::class);
+    });
 });
